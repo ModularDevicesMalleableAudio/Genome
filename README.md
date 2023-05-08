@@ -1,2 +1,2 @@
 # Genome
-Genetic Algorithm CV/Gate sequencer for Daisy patch.Init()
+Genetic Algorithm CV sequencer for [Daisy `patch.Init()`](https://www.electro-smith.com/daisy/patchinit).
