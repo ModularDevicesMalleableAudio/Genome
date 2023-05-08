@@ -30,3 +30,15 @@
 *.exe
 *.out
 *.app
+
+# clion shite
+.idea
+
+# mac shite
+.DS_Store
+
+# notebook shite
+.ipynb_checkpoints
+
+build
+cmake-build-debug
