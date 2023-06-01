@@ -13,10 +13,14 @@ struct Sequence {
 
 DaisyPatchSM hw;
 Switch       toggle;
+Switch       button;
 Sequence     sequence;
 
 //std::vector<int> Minor {0, 2, 3, 5, 7, 8, 10};
 //std::vector<int> Major {0, 2, 4, 5, 6, 8, 10};
+float        button_params[2] = {0.f, 5.f};
+float        param = 0.f;
+int          button_idx = 0;
 int          counters[2] = {0, 0 };
 int          divisions[2] = {4, 3 };
 float        led_voltage = 0.f;
@@ -27,6 +31,7 @@ int main() {
     /** Initialize the hardware */
     hw.Init();
     toggle.Init(DaisyPatchSM::B8);
+    button.Init(DaisyPatchSM::B7);
     sequence.notes = {0.f, 2.f, 5.f, 8.f};
 
     for(;;)
@@ -43,7 +48,6 @@ int main() {
             note_input_2 = 0;
         };
 
-
         // Get recording armed state from the switch
         toggle.Debounce();
         bool recording_armed = toggle.Pressed();
@@ -52,8 +56,12 @@ int main() {
         led_voltage = static_cast<float>(recording_armed) * 5.0f;
         hw.WriteCvOut(CV_OUT_2, led_voltage);
 
-//        float led_gate_voltage = static_cast<float>(hw.gate_in_1.State());
-//        hw.WriteCvOut(CV_OUT_2, led_gate_voltage);
+        // Change Parameters using the button
+        button.Debounce();
+        if (button.RisingEdge()) {
+            button_idx += 1;
+            param = button_params[button_idx % 2];
+        };
 
         // Advance counters, output next CV value
         if (hw.gate_in_1.Trig()) {
